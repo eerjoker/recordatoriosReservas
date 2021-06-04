@@ -78,7 +78,20 @@ function crearEnviadorDeMails(mail, pass){
             } catch (err) {
                 throw crearErrorMailNoEnviado(`Error al enviar el mail. ${err}`)
             }
-          }    
+          },
+          async enviarVariosConTexto(mails) {
+              let errores = ''
+              for(mail of mails) {
+                try {
+                    await this.enviarConTexto(mail.to, mail.subject, mail.text)
+                } catch (err) {
+                    errores += `Error al enviar el mail para ${ mail.to }: ${ err.message }\n\n`
+                }
+              }
+              if(errores) {
+                throw crearErrorMailNoEnviado(errores)
+              }
+          }
       }
 
 }
